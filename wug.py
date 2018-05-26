@@ -65,29 +65,29 @@ async def on_ready():
 
 @client.event
 async def on_reaction_add(reaction, user):
-    if user.id == client.user.id: return
-    added_roles = []
-    msg = ""
-    if reaction.emoji in WUG_EMOJIS:
-        added_roles.append(WUG_NAMES[WUG_EMOJIS.index(reaction.emoji)])
-    elif reaction.emoji == CONFIRMATION[0]:
-        msg = "OKAY"
-    elif reaction.emoji == CONFIRMATION[1]:
-        await client.delete_message(reaction.message)
-    # await client.add_roles(reaction.message.author, discord.utils.get(reaction.message.server.roles, name="Nanamin"))
+    if user.id == client.user.id or not reaction.message.channel.id == '449810011351285771': return
+    role_name = str(WUG_NAMES[WUG_EMOJIS.index(reaction.emoji)])
+    role = discord.utils.get(reaction.message.server.roles, name=role_name)
+    await client.add_roles(user, role)
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    if user.id == client.user.id or not reaction.message.channel.id == '449810011351285771': return
+    role_name = str(WUG_NAMES[WUG_EMOJIS.index(reaction.emoji)])
+    role = discord.utils.get(reaction.message.server.roles, name=role_name)
+    await client.remove_roles(user, role)
 
 @client.event
 async def on_message(message):
     if message.author == client.user: return
 
-    elif message.content.startswith('r'):
-        return
-        emotion = WUG_EMOJIS+CONFIRMATION
-        o = ""
+    elif message.content.startswith("!roles"):
         msg = await client.send_message(message.channel, "```Loading```")
-        for x in emotion:
-            o += x + "\n"
+        for x in WUG_EMOJIS:
             await client.add_reaction(msg, x)
+        o = ""
+        for x in range(0, len(WUG_NAMES)):
+            o += "{} - {}\n".format(WUG_NAMES[x], WUG_EMOJIS[x])
         await client.edit_message(msg, "```{}```".format(o))
 
     elif message.content.startswith("!x"):
@@ -97,5 +97,5 @@ async def on_message(message):
             role_list.append(k.name)
         await client.send_message(message.channel, "\n".join(role_list))
 
-# client.loop.create_task(upds())
-client.run('MzgwNTc4OTkyNTcyNTk2MjI0.DefrkA.zoaALpWriUhtcYaqJSPyw6plvrY')
+client.loop.create_task(upds())
+client.run(os.environ.get('BOT_TOKEN'))
