@@ -1,4 +1,4 @@
-# wug-bot
+# discord-sample-bot
 A Discord bot
 ## Commands
 - `!r` - Add role
