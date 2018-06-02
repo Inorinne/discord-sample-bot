@@ -53,7 +53,7 @@ async def upds():
             e = generate_embed(title, msg, url, icon, thumb, "default", dt_f)
             await client.send_message(discord.Object(id='449125060033249280'), embed=e)
             ameblo = title
-        await asyncio.sleep(1)
+        await asyncio.sleep(60)
 
 @client.event
 async def on_ready():
